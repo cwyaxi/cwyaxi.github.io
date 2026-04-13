@@ -1,13 +1,12 @@
 const musicPrompt = document.getElementById('music-prompt');
 const musicBtn = document.getElementById('music-btn');
-const music = document.getElementById('bg-music');
 
 musicBtn.addEventListener('click', () => {
-    music.volume = 0.5;
-    music.play();
     musicPrompt.style.opacity = '0';
     musicPrompt.style.transition = 'opacity 0.5s';
     setTimeout(() => musicPrompt.style.display = 'none', 500);
+    loadTrack(0);
+    playTrack();
 });
 
 function glitchIcons() {
@@ -254,9 +253,8 @@ setInterval(spawnEye, 700);
 function screenTear() {
     if (Math.random() > 0.93) {
         const el = document.createElement('div');
-        const y = Math.random()*100;
         Object.assign(el.style, {
-            position: 'fixed', top: y+'%', left: '0', width: '100%', height: '3px',
+            position: 'fixed', top: Math.random()*100+'%', left: '0', width: '100%', height: '3px',
             background: 'rgba(255,255,255,0.9)', zIndex: '8', pointerEvents: 'none',
             transform: `translateX(${Math.random()*60-30}px)`
         });
@@ -288,3 +286,101 @@ const sym = ',.?/|\\-_~*#@!%^&+=<>[]{}';
 setInterval(() => {
     document.title = Array.from({length: 6}, () => sym[Math.floor(Math.random()*sym.length)]).join('');
 }, 1000);
+
+const tracks = [
+    { src: '1.mp3', title: 'Больше не буду', cover: '1.jpg' },
+    { src: '2.mp3', title: 'Doin Time',       cover: '2.jpg' },
+    { src: '3.mp3', title: 'С тобой',         cover: '3.jpg' },
+    { src: '4.mp3', title: 'Lonely Day',      cover: '4.jpg' },
+    { src: '5.mp3', title: 'Пена изо рта',    cover: '5.jpg' },
+    { src: '6.mp3', title: 'Колготки',        cover: '6.jpg' },
+    { src: '7.mp3', title: 'Metropolis',      cover: '7.jpg' },
+    { src: '8.mp3', title: 'Хочу',            cover: '8.jpg' },
+];
+
+let currentTrack = 0;
+const playerAudio = document.getElementById('player-audio');
+const playerTitle = document.getElementById('player-title');
+const playerCover = document.getElementById('player-cover');
+const playerProgress = document.getElementById('player-progress');
+const playerCurrent = document.getElementById('player-current');
+const playerDuration = document.getElementById('player-duration');
+const playIcon = document.getElementById('play-icon');
+const muteIcon = document.getElementById('mute-icon');
+const volumeSlider = document.getElementById('volume-slider');
+
+function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function loadTrack(index) {
+    const t = tracks[index];
+    playerAudio.src = t.src;
+    playerTitle.textContent = t.title;
+    playerCover.src = t.cover;
+    playerProgress.value = 0;
+    playerCurrent.textContent = '0:00';
+    playerDuration.textContent = '0:00';
+}
+
+function playTrack() {
+    playerAudio.play();
+    playIcon.className = 'fa-solid fa-pause';
+}
+
+function pauseTrack() {
+    playerAudio.pause();
+    playIcon.className = 'fa-solid fa-play';
+}
+
+document.getElementById('btn-play').addEventListener('click', () => {
+    if (playerAudio.paused) playTrack(); else pauseTrack();
+});
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    loadTrack(currentTrack);
+    playTrack();
+});
+
+document.getElementById('btn-next').addEventListener('click', () => {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    loadTrack(currentTrack);
+    playTrack();
+});
+
+document.getElementById('btn-mute').addEventListener('click', () => {
+    playerAudio.muted = !playerAudio.muted;
+    muteIcon.className = playerAudio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    if (!playerAudio.muted) volumeSlider.value = playerAudio.volume * 100;
+});
+
+volumeSlider.addEventListener('input', () => {
+    playerAudio.volume = volumeSlider.value / 100;
+    playerAudio.muted = false;
+    muteIcon.className = volumeSlider.value == 0 ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+});
+
+playerAudio.addEventListener('timeupdate', () => {
+    if (!playerAudio.duration) return;
+    playerProgress.value = (playerAudio.currentTime / playerAudio.duration) * 100;
+    playerCurrent.textContent = formatTime(playerAudio.currentTime);
+    playerDuration.textContent = formatTime(playerAudio.duration);
+});
+
+playerProgress.addEventListener('input', () => {
+    if (!playerAudio.duration) return;
+    playerAudio.currentTime = (playerProgress.value / 100) * playerAudio.duration;
+});
+
+playerAudio.addEventListener('ended', () => {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    loadTrack(currentTrack);
+    playTrack();
+});
+
+playerAudio.src = tracks[0].src;
+playerTitle.textContent = tracks[0].title;
+playerCover.src = tracks[0].cover;
