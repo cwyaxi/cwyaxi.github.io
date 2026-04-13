@@ -287,7 +287,21 @@ setInterval(() => {
     document.title = Array.from({length: 6}, () => sym[Math.floor(Math.random()*sym.length)]).join('');
 }, 1000);
 
-const tracks = [
+function glitchPlayer() {
+    const bar = document.querySelector('.border-bar');
+    if (!bar) return;
+    if (Math.random() > 0.85) {
+        bar.style.opacity = Math.random() > 0.5 ? '0.6' : '1';
+        setTimeout(() => { bar.style.opacity = '1'; }, 60);
+    }
+    if (Math.random() > 0.92) {
+        const chars = '!@#$%█▓';
+        const orig = playerTitle.textContent;
+        playerTitle.textContent = orig.split('').map(c => Math.random() > 0.6 ? chars[Math.floor(Math.random()*chars.length)] : c).join('');
+        setTimeout(() => { playerTitle.textContent = orig; }, 80);
+    }
+}
+setInterval(glitchPlayer, 300);const tracks = [
     { src: '1.mp3', title: 'Больше не буду', cover: '1.jpg' },
     { src: '2.mp3', title: 'Doin Time',       cover: '2.jpg' },
     { src: '3.mp3', title: 'С тобой',         cover: '3.jpg' },
