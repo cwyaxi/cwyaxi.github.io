@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cwyaxi</title>
+    <link rel="icon" type="image/jpeg" href="photo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+    <div id="particles"></div>
+    <div id="ripple-layer"></div>
+
+    <div class="enter-screen" id="enter-screen">
+        <div class="enter-content">
+            <div class="enter-top">
+                <div class="enter-glyph">⬡</div>
+                <div class="enter-text-block">
+                    <h2>cwyaxi</h2>
+                    <p>Браузеры блокируют автоплееры. Для того чтобы включить песню и зайти на сайт, пожалуйста нажмите на кнопку ниже.</p>
+                </div>
+            </div>
+            <button id="enter-btn">
+                <span class="btn-wave"></span>
+                <span class="btn-wave"></span>
+                <i class="fa-solid fa-play"></i>
+                Погрузиться
+            </button>
+        </div>
+    </div>
+
+    <main class="site" id="site">
+        <div class="card">
+            <div class="card-glow"></div>
+
+            <div class="avatar-section">
+                <div class="avatar-outer">
+                    <div class="avatar-inner-ring"></div>
+                    <img src="photo.jpg" alt="cwyaxi" class="avatar-img">
+                    <div class="avatar-bubbles" id="avatar-bubbles"></div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h1 class="username">cwyaxi</h1>
+                <div class="socials">
+                    <a href="https://ds.eronig.pro" target="_blank" class="soc-btn" title="Discord">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <a href="https://t.me/cwyaxi" target="_blank" class="soc-btn" title="Telegram">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                    <a href="https://m.cwyaxi.lol" target="_blank" class="soc-btn" title="Сайт">
+                        <i class="fa-solid fa-globe"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="player-section">
+                <div class="now-playing">
+                    <span class="np-label">сейчас играет</span>
+                    <div class="np-bars" id="np-bars">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="track-row">
+                    <img src="2.jpg" alt="cover" class="track-cover" id="track-cover">
+                    <div class="track-info">
+                        <div class="track-name">Doin Time</div>
+                        <div class="track-artist">Lana Del Rey</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <span class="t" id="t-cur">0:00</span>
+                    <input type="range" id="progress" value="0" min="0" max="100" step="0.1">
+                    <span class="t" id="t-dur">0:00</span>
+                </div>
+                <div class="controls-row">
+                    <button class="ctrl-btn" id="btn-play">
+                        <i class="fa-solid fa-play" id="play-icon"></i>
+                    </button>
+                    <div class="vol-row">
+                        <button class="ctrl-btn small" id="btn-mute">
+                            <i class="fa-solid fa-volume-high" id="vol-icon"></i>
+                        </button>
+                        <input type="range" id="vol" value="80" min="0" max="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <audio id="audio" src="2.mp3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
